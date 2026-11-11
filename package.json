@@ -1,0 +1,64 @@
+{
+	"name": "@reclack/walletkit-vue",
+	"version": "0.1.0",
+	"description": "The Reclack wallet picker as a Vue component.",
+	"license": "MIT",
+	"author": "Reclack",
+	"homepage": "https://github.com/reclack/walletkit-vue#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/reclack/walletkit-vue.git"
+	},
+	"bugs": {
+		"url": "https://github.com/reclack/walletkit-vue/issues"
+	},
+	"type": "module",
+	"sideEffects": [
+		"./dist/index.js"
+	],
+	"keywords": [
+		"wallet",
+		"vue",
+		"ethereum",
+		"solana",
+		"stablecoin",
+		"usdc"
+	],
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"engines": {
+		"node": ">=18"
+	},
+	"scripts": {
+		"build": "rm -rf dist && tsc -p tsconfig.json",
+		"typecheck": "tsc -p tsconfig.json --noEmit",
+		"prepublishOnly": "pnpm run build"
+	},
+	"peerDependencies": {
+		"@reclack/walletkit": "^0.1.0",
+		"vue": ">=3.4"
+	},
+	"devDependencies": {
+		"@reclack/walletkit": "file:../walletkit",
+		"typescript": "~5.9.3",
+		"vue": "^3.5.45"
+	},
+	"dependenciesMeta": {
+		"@reclack/walletkit": {
+			"injected": true
+		}
+	}
+}

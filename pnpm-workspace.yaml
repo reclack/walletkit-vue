@@ -1,0 +1,7 @@
+# Reown's AppKit arrives with the relay provider and ships its own wallet
+# modal, which this kit does not use: it draws its own pairing panel. Its
+# install scripts are not needed, and saying so keeps an install from stopping
+# to ask.
+allowBuilds:
+  '@reown/appkit': false
+  esbuild: true
