@@ -152,6 +152,8 @@ export const ReclackNetwork = defineComponent({
 		radius: { type: String, default: undefined },
 		fontFamily: { type: String, default: undefined },
 		assetBase: { type: String, default: undefined },
+		/** A kit to take the theme from, as the picker does. */
+		kit: { type: Object as PropType<WalletKit>, default: undefined },
 		/** A theme carrying more than the four attributes can hold. */
 		theme: { type: Object as PropType<WalletKitTheme>, default: undefined },
 	},
@@ -162,9 +164,10 @@ export const ReclackNetwork = defineComponent({
 		const element = ref<ReclackNetworkElement | null>(null)
 		let listener: ((event: Event) => void) | undefined
 
-		// A property, not an attribute: a theme is an object.
+		// Properties, not attributes: neither a kit nor a theme is a string.
 		watchEffect(() => {
 			if (element.value) {
+				element.value.kit = props.kit
 				element.value.theme = props.theme
 			}
 		})
