@@ -11,7 +11,9 @@ import {
 import {
 	attributesOf,
 	EVENTS,
+	networkAttributesOf,
 	type ConnectProps,
+	type NetworkProps,
 	type ReclackConnectElement,
 } from '@reclack/walletkit/element'
 import type {
@@ -21,7 +23,7 @@ import type {
 	WalletKitTheme,
 } from '@reclack/walletkit'
 
-export type { ConnectProps } from '@reclack/walletkit/element'
+export type { ConnectProps, NetworkProps } from '@reclack/walletkit/element'
 
 /**
  * The Reclack wallet picker, as a Vue component.
@@ -119,6 +121,65 @@ export const ReclackConnect = defineComponent({
 			h('reclack-connect', {
 				ref: element,
 				...attributesOf(props as ConnectProps),
+			})
+	},
+})
+
+/**
+ * The chain picker, as a component.
+ *
+ * Takes `networks` and `value` and emits `change`, which is what a Vue
+ * component is expected to do. The element works directly too, but then the
+ * compiler has to be told the tag is not a component and the value comes
+ * back through `$event.detail` rather than as the payload.
+ */
+export const ReclackNetwork = defineComponent({
+	name: 'ReclackNetwork',
+	props: {
+		networks: {
+			type: [Array, String] as PropType<string[] | string>,
+			default: undefined,
+		},
+		value: { type: String, default: undefined },
+		label: { type: String, default: undefined },
+		disabled: { type: Boolean, default: false },
+		themeMode: {
+			type: String as PropType<'light' | 'dark' | 'system'>,
+			default: undefined,
+		},
+		brand: { type: String, default: undefined },
+		radius: { type: String, default: undefined },
+		fontFamily: { type: String, default: undefined },
+		assetBase: { type: String, default: undefined },
+	},
+	emits: {
+		change: (network: string) => typeof network === 'string',
+	},
+	setup (props, { emit }) {
+		const element = ref<HTMLElement | null>(null)
+		let listener: ((event: Event) => void) | undefined
+
+		onMounted(() => {
+			const node = element.value
+			if (!node) {
+				return
+			}
+			listener = (raw: Event) => {
+				emit('change', (raw as CustomEvent<{ network: string }>).detail.network)
+			}
+			node.addEventListener('change', listener)
+		})
+
+		onBeforeUnmount(() => {
+			if (listener) {
+				element.value?.removeEventListener('change', listener)
+			}
+		})
+
+		return () =>
+			h('reclack-network', {
+				ref: element,
+				...networkAttributesOf(props as NetworkProps),
 			})
 	},
 })
