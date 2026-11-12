@@ -15,6 +15,7 @@ import {
 	type ConnectProps,
 	type NetworkProps,
 	type ReclackConnectElement,
+	type ReclackNetworkElement,
 } from '@reclack/walletkit/element'
 import type {
 	ConnectRequest,
@@ -151,13 +152,22 @@ export const ReclackNetwork = defineComponent({
 		radius: { type: String, default: undefined },
 		fontFamily: { type: String, default: undefined },
 		assetBase: { type: String, default: undefined },
+		/** A theme carrying more than the four attributes can hold. */
+		theme: { type: Object as PropType<WalletKitTheme>, default: undefined },
 	},
 	emits: {
 		change: (network: string) => typeof network === 'string',
 	},
 	setup (props, { emit }) {
-		const element = ref<HTMLElement | null>(null)
+		const element = ref<ReclackNetworkElement | null>(null)
 		let listener: ((event: Event) => void) | undefined
+
+		// A property, not an attribute: a theme is an object.
+		watchEffect(() => {
+			if (element.value) {
+				element.value.theme = props.theme
+			}
+		})
 
 		onMounted(() => {
 			const node = element.value
